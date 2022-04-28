@@ -11,10 +11,9 @@ const RatingScreen = ({ navigation, route }) => {
 
   const setting = (data) => {
     for (const item in data) {
-      if (item.user === username && item.song === song) {
+      if (data[item].user === username && data[item].song === song) {
         setAdd(false)
-        setID(item.id)
-        console.log(item)
+        setID(data[item].id)
       }
     }
     setData(data);
@@ -40,18 +39,18 @@ const RatingScreen = ({ navigation, route }) => {
   
   const UpdateRate = (id, user,tempsong,rating,description) => {
     if (user !== "" && tempsong !== "" && rating !== "" && description !== "" ) {
-        fetch("http://127.0.0.1:8000/api/rating/"+id, {method: 'PATCH',
+        fetch("http://127.0.0.1:8000/api/rating/"+id+'/', {method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "user": user,
-          "song": tempsong,
-          "rating": rating,
-          "description": description
+          'id': id,
+          'user': user,
+          'song': tempsong,
+          'rating' : rating,
+          'description': description
         })})
-        .then((response) => response.json())
         .catch((error) => console.error(error))
     }
   }
