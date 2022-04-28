@@ -13,16 +13,19 @@ const Login = ({ navigation }) => {
         <Text>Username: </Text>
         <TextInput
           onChangeText={onChangeUser}
-          value={user}
+          placeholder={user}
         />
         <Text>Password: </Text>
         <TextInput
           onChangeText={onChangePassword}
-          value={password}
+          placeholder={password}
         />
         <Button
         title="Login"
-        onPress={() => navigation.navigate("Home", {username: user, password: password, loggin: templog})}
+        onPress={() => navigation.navigate("Home", {
+          username: user, 
+          password: password, 
+          loggin: templog})}
         />
       </View>
     )

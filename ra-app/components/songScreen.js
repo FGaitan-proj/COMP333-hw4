@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, Button, TextInput } from "react-native";
+import React, { useState } from "react";
+import { Text, View, Button, TextInput } from "react-native";
 
 const SongScreen = ({ navigation, route }) => {
-  const { username } = route.params;
-  const [tempsong, setSong] = useState("");
+  const {adding, currentsong, currentartist, currentyear ,currentgenre, 
+  loggin , username , password} = route.params;
 
-  const [song, onChangeSong] = useState("Enter Song");
-  const [artist, onChangeArtist] = useState("Enter Artist");
-  const [year, onChangeYear] = useState(null);
-  const [genre, onChangeGenre] = useState("Enter Genre");
+  const [song, onChangeSong] = useState(currentsong);
+  const [artist, onChangeArtist] = useState(currentartist);
+  const [year, onChangeYear] = useState(currentyear);
+  const [genre, onChangeGenre] = useState(currentgenre);
 
-  const AddSong = (song,artist,year,genre) => {
+  const UpdateSong = (song,artist,year,genre) => {
     if (song !== "" && artist !== "" && year !== "" && genre !== "" ) {
-      fetch("http://127.0.0.1:8000/api/artist/"+song)
-      .then((response) => response.json())
-      .then((json) => setSong(json))
-      .catch((error) => console.error(error))
-      if (!tempsong) {
-        fetch("http://127.0.0.1:8000/api/artist/", {method: 'POST',
+        fetch("http://127.0.0.1:8000/api/artist/"+song, {method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -30,20 +25,48 @@ const SongScreen = ({ navigation, route }) => {
         })})
         .then((response) => response.json())
         .catch((error) => console.error(error))
-      }
     }
+  }
 
+  const AddSong = (song,artist,year,genre) => {
+    if (song !== "" && artist !== "" && year !== "" && genre !== "" ) {
+        fetch("http://127.0.0.1:8000/api/artist/", {method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'song': song,
+          'artist': artist,
+          'year': year,
+          'genre': genre
+        })})
+        // .then((response) => response.json())
+        .catch((error) => console.error(error))
+    }
     //could add an alert here as the else statement
+  }
+
+  const number = (item1) => {
+    if (typeof(item1) === 'number') {
+      return item1.toString()
+    } else {
+      return item1
+    }
   }
 
 
   return (
     <View>
-      <Text>Song: </Text>
-      <TextInput
+      {(adding) ? (
+        <View>
+        <Text>Song: </Text>
+        <TextInput
         onChangeText={onChangeSong}
         value={song}
       />
+        </View>
+      ): <Text>Song: {song}</Text>}    
       <Text>Artist: </Text>
       <TextInput
         onChangeText={onChangeArtist}
@@ -52,27 +75,41 @@ const SongScreen = ({ navigation, route }) => {
       <Text>Year: </Text>
       <TextInput
         onChangeText={onChangeYear}
-        type
-        value={year}
+        value={number(year)}
       />
       <Text>Genre: </Text>
       <TextInput
         onChangeText={onChangeGenre}
         value={genre}
       />
-      <Button
-      title="Add"
-      onPress={() => 
-        {
-          AddSong(song,artist,year,genre);
-          // navigation.navigate("Home", {loggin: true, username: username})
-          navigation.push("Home", {loggin: true, username: username})
-        }
-      }
-      />
+      {(adding) ? (
+        <Button
+        title="Add"
+        onPress={() => {
+            AddSong(song,artist,year,genre);
+            navigation.push("Home", {
+              loggin: loggin, 
+              username: username, 
+              password: password})
+          }}
+        />
+      ) : (
+        <Button
+        title="Update"
+        onPress={() => {
+            UpdateSong(song,artist,year,genre);
+            navigation.push("Home", {
+              loggin: loggin, 
+              username: username, 
+              password: password})
+          }}
+        />
+      )}
     </View>
   )
   
 };
+
+
 
 export default SongScreen;

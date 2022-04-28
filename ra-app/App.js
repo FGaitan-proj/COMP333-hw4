@@ -23,12 +23,20 @@ export default function App() {
         <Stack.Screen 
           name="Add a Song" 
           component={SongScreen} 
-          initialParams={{ username: "" }}
+          initialParams={{ 
+            adding: false , 
+            loggin: false, username: "", password: "",
+            currentsong: "Enter Song", currentartist: "Enter Artist", 
+            currentyear: null , currentgenre: "Enter Genre"}}
           />
         <Stack.Screen 
           name="Add a Rating" 
           component={RatingScreen}
-          initialParams={{ username: "", song: "" }} />
+          initialParams={{ 
+            username: "", 
+            password: "",
+            song: ""
+            }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
