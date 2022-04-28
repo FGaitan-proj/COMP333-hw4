@@ -29,7 +29,7 @@ python3 manage.py runserver
 ```
 
 In a separate instance of the terminal do the following
-
+install: @react-navigation/native, @react-navigation/stack, react, react-native
 ```bash
 npm install -g create-react-app
 cd frontend

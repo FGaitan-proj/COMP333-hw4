@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, Button, TextInput } from "react-native";
+import { styles } from "../styles";
 
 const SongScreen = ({ navigation, route }) => {
   const {adding, currentsong, currentartist, currentyear ,currentgenre, 
@@ -60,25 +61,29 @@ const SongScreen = ({ navigation, route }) => {
     <View>
       {(adding) ? (
         <View>
-        <Text>Song: </Text>
+        <Text> Song: </Text>
         <TextInput
+        style={styles.input}
         onChangeText={onChangeSong}
         value={song}
       />
         </View>
-      ): <Text>Song: {song}</Text>}    
+      ): <Text style={styles.subtite} >Song: {song}</Text>}    
       <Text>Artist: </Text>
       <TextInput
+        style={styles.input}
         onChangeText={onChangeArtist}
         value={artist}
       />
       <Text>Year: </Text>
       <TextInput
+        style={styles.input}
         onChangeText={onChangeYear}
         value={number(year)}
       />
       <Text>Genre: </Text>
       <TextInput
+        style={styles.input}
         onChangeText={onChangeGenre}
         value={genre}
       />

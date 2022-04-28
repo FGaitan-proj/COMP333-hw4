@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, Button, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import SongScreen from "./components/songScreen"

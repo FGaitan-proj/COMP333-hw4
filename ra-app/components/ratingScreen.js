@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, Button, TextInput } from "react-native";
+import { FlatList, Text, View, Button, TextInput, Alert } from "react-native";
+import { styles } from "../styles";
+// import { Notifications } from 'react-native-notifications';
 
 const RatingScreen = ({ navigation, route }) => {
   const { song, username, password } = route.params;
@@ -8,6 +10,17 @@ const RatingScreen = ({ navigation, route }) => {
   const [key, setID] = useState(null);
   const [adding, setAdd] = useState(true);
   const [description, setDesc] = useState("Enter Description");
+
+  // const registerForPushNotifications = async () => { 
+  //   try {
+  //      const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  //      if (!permission.granted) return;
+  //      const token = await Notifications.getExpoPushTokenAsync();
+  //   console.log(token);
+  //   } catch (error) {
+  //     console.log('Error getting a token', error);
+  //   }
+  // }
 
   const setting = (data) => {
     for (const item in data) {
@@ -24,7 +37,6 @@ const RatingScreen = ({ navigation, route }) => {
       .then((response) => response.json())
       .then((json) => setting(json))
       .catch((error) => console.error(error))
-      .finally(() => null);
   }, []);
 
   const restrict = (num) => {
@@ -38,7 +50,7 @@ const RatingScreen = ({ navigation, route }) => {
   }
   
   const UpdateRate = (id, user,tempsong,rating,description) => {
-    if (user !== "" && tempsong !== "" && rating !== "" && description !== "" ) {
+    if (user !== "" && tempsong !== "" && rating !== null && description !== "" ) {
         fetch("http://127.0.0.1:8000/api/rating/"+id+'/', {method: 'PATCH',
         headers: {
           Accept: 'application/json',
@@ -52,6 +64,8 @@ const RatingScreen = ({ navigation, route }) => {
           'description': description
         })})
         .catch((error) => console.error(error))
+    } else {
+      Alert.alert('OOPS!', 'All inputs must be filled' [{text: 'Got it!'}])
     }
   }
 
@@ -70,16 +84,15 @@ const RatingScreen = ({ navigation, route }) => {
         })})
         // .then((response) => response.json())
         .catch((error) => console.error(error))
+    } else {
+      Alert.alert('All inputs must be filled', 'All inputs must be filled' [{text: 'Got it!'}])
     }
-    //could add an alert here as the else statement
   }
 
 
   return (
     <View>
-      <Text style={{ fontSize: 18,
-              color: "green",
-              textAlign: "center",}}>Ratings for Song: 
+      <Text style={styles.subtite}>Ratings for Song: 
         {song}</Text>
       <FlatList
           data={data}
@@ -93,17 +106,19 @@ const RatingScreen = ({ navigation, route }) => {
       {adding ? ("Add"):"Edit"} Your Rating Here</Text>
       <Text style={{ fontSize: 14, color: "red", textAlign: "center",}}>
         User: {username}</Text>
-      
+      <Text>Enter Description: </Text>
       <TextInput
+        style={styles.input}
         onChangeText={setDesc}
-        placeholder={description}
       />
+      <Text>Enter Rate 1-5: </Text>
       <TextInput
+        style={styles.input}
         onChangeText={restrict}
-        placeholder="Enter Rate 1-5"
         keyboardType="numeric"
         maxLength={1}
       />
+
       <Button
       title={adding ? ("Add"):"Edit"}
       onPress={() => {

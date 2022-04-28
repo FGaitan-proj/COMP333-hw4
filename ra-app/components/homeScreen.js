@@ -16,22 +16,6 @@ const HomeScreen = ({ navigation, route }) => {
     }, []);
 
 
-    {(username != "" && !loggin) ? (
-        fetch("http://127.0.0.1:8000/api/user/", {method: 'POST',
-        headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-        'user': username,
-        'password': password
-        })})
-        .then((response) => response.json())
-        .catch((error) => console.error(error))
-        ) : null
-    }
-
-
     const Delete = (song) => {
         fetch("http://127.0.0.1:8000/api/artist/"+song, { method: 'DELETE', 
         headers: {
@@ -87,7 +71,8 @@ const HomeScreen = ({ navigation, route }) => {
                     onPress={() => {
                         Delete(item.song);
                         navigation.push('Home', 
-                                {username: username, 
+                                {loggin: true,
+                                username: username, 
                                 password: password})}}
                 />
                 <Button
